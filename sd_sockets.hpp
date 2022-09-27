@@ -58,7 +58,7 @@ public:
 
     if (error) throw std::system_error(error);
 
-    auto prefix = int32_t{};
+    auto prefix = uint32_t{};
     std::copy(
       input_buffer_.begin(), std::next(input_buffer_.begin(), 4),
       reinterpret_cast<char *>(&prefix));
