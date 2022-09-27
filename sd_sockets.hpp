@@ -91,7 +91,7 @@ public:
 
     std::error_code error;
     asio::async_write(
-      socket_, asio::buffer(data),
+      socket_, asio::buffer(data), asio::transfer_exactly(data.length()),
       [&](const std::error_code & result_error, std::size_t /*result_n*/) {
         error = result_error;
       });
