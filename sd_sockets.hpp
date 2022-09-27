@@ -48,29 +48,45 @@ public:
   std::string read(std::chrono::steady_clock::duration timeout = std::chrono::seconds(INT_MAX))
   {
     std::error_code error;
-    std::size_t length = 0;
     asio::async_read(
-      socket_, asio::dynamic_buffer(input_buffer_),
-      [&](const std::error_code & result_error, std::size_t result_length) {
+      socket_, asio::dynamic_buffer(input_buffer_), asio::transfer_exactly(4),
+      [&](const std::error_code & result_error, std::size_t /*result_length*/) {
         error = result_error;
-        length = result_length;
       });
 
     run(timeout);
 
     if (error) throw std::system_error(error);
 
-    std::string line(input_buffer_.substr(0, length - 1));
-    input_buffer_.erase(0, length);
-    return line;
+    auto prefix = int32_t{};
+    std::copy(
+      input_buffer_.begin(), std::next(input_buffer_.begin(), 4),
+      reinterpret_cast<char *>(&prefix));
+    prefix = ntohl(prefix);
+
+    input_buffer_.erase(0, 4);
+
+    std::cout << "Prefix: " << prefix << std::endl;
+
+    asio::async_read(
+      socket_, asio::dynamic_buffer(input_buffer_), asio::transfer_exactly(prefix),
+      [&](const std::error_code & result_error, std::size_t /*result_length*/) {
+        error = result_error;
+      });
+
+    run(timeout);
+
+    if (error) throw std::system_error(error);
+
+    std::string msg(input_buffer_.substr(0, prefix));
+    input_buffer_.erase(0, prefix);
+    return msg;
   }
 
   void write(const std::string & msg, std::chrono::steady_clock::duration timeout)
   {
-    auto len = msg.length();
-    // Note: using reinterpret cast is generally discouraged. Check whether it is needed
-    // https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/
-    auto prefix = std::string{reinterpret_cast<const char *>(&len), sizeof(unsigned int)};
+    auto len = htonl(msg.length());
+    auto prefix = std::string{reinterpret_cast<const char *>(&len), 4};
     auto data = prefix + msg;
 
     std::error_code error;
