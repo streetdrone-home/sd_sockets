@@ -72,8 +72,6 @@ public:
 
     input_buffer_.erase(0, 4);
 
-    std::cout << "Prefix: " << prefix << std::endl;
-
     asio::async_read(
       socket_, asio::dynamic_buffer(input_buffer_), asio::transfer_exactly(prefix),
       [&](const std::error_code & result_error, std::size_t result_length) {
