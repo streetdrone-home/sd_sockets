@@ -68,9 +68,11 @@ public:
   void write(const std::string & msg, std::chrono::steady_clock::duration timeout)
   {
     auto len = msg.length();
+    // Note: using reinterpret cast is generally discouraged. Check whether it is needed
+    // https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/
     auto prefix = std::string{reinterpret_cast<const char *>(&len), sizeof(unsigned int)};
     auto data = prefix + msg;
-    
+
     std::error_code error;
     asio::async_write(
       socket_, asio::buffer(data),
