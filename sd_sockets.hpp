@@ -24,7 +24,7 @@
 #include "asio/connect.hpp"
 #include "asio/io_context.hpp"
 #include "asio/ip/tcp.hpp"
-#include "asio/read_until.hpp"
+#include "asio/read.hpp"
 #include "asio/system_error.hpp"
 #include "asio/write.hpp"
 
@@ -49,8 +49,8 @@ public:
   {
     std::error_code error;
     std::size_t length = 0;
-    asio::async_read_until(
-      socket_, asio::dynamic_buffer(input_buffer_), '\n',
+    asio::async_read(
+      socket_, asio::dynamic_buffer(input_buffer_),
       [&](const std::error_code & result_error, std::size_t result_length) {
         error = result_error;
         length = result_length;
