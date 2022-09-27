@@ -65,10 +65,12 @@ public:
     return line;
   }
 
-  void write(const std::string & line, std::chrono::steady_clock::duration timeout)
+  void write(const std::string & msg, std::chrono::steady_clock::duration timeout)
   {
-    std::string data = line + "\n";
-
+    auto len = msg.length();
+    auto prefix = std::string{reinterpret_cast<const char *>(&len), sizeof(unsigned int)};
+    auto data = prefix + msg;
+    
     std::error_code error;
     asio::async_write(
       socket_, asio::buffer(data),
