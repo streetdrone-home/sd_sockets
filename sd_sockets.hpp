@@ -48,13 +48,19 @@ public:
   std::string read(std::chrono::steady_clock::duration timeout = std::chrono::seconds(INT_MAX))
   {
     std::error_code error;
+    size_t length = 0;
     asio::async_read(
       socket_, asio::dynamic_buffer(input_buffer_), asio::transfer_exactly(4),
-      [&](const std::error_code & result_error, std::size_t /*result_length*/) {
+      [&](const std::error_code & result_error, std::size_t result_length) {
         error = result_error;
+        length = result_length;
       });
 
     run(timeout);
+
+    if (length != 4) {
+      throw std::runtime_error("Failed to read prefix");
+    }
 
     if (error) throw std::system_error(error);
 
@@ -70,11 +76,16 @@ public:
 
     asio::async_read(
       socket_, asio::dynamic_buffer(input_buffer_), asio::transfer_exactly(prefix),
-      [&](const std::error_code & result_error, std::size_t /*result_length*/) {
+      [&](const std::error_code & result_error, std::size_t result_length) {
         error = result_error;
+        length = result_length;
       });
 
     run(timeout);
+
+    if (length != prefix) {
+      throw std::runtime_error("Failed to read prefix");
+    }
 
     if (error) throw std::system_error(error);
 
