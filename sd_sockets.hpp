@@ -91,8 +91,8 @@ public:
 protected:
   std::string get_bytes(const size_t & n_bytes, const std::chrono::steady_clock::duration & timeout)
   {
-    std::string data{};
-    std::error_code error{};
+    std::string data;
+    std::error_code error;
     size_t length = 0;
 
     asio::async_read(
