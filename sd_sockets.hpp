@@ -47,48 +47,15 @@ class Socket
 public:
   std::string read(std::chrono::steady_clock::duration timeout = std::chrono::seconds(INT_MAX))
   {
-    std::error_code error;
-    size_t length = 0;
-    asio::async_read(
-      socket_, asio::dynamic_buffer(input_buffer_), asio::transfer_exactly(4),
-      [&](const std::error_code & result_error, std::size_t result_length) {
-        error = result_error;
-        length = result_length;
-      });
-
-    run(timeout);
-
-    if (length != 4) {
-      throw std::runtime_error("Failed to read prefix");
-    }
-
-    if (error) throw std::system_error(error);
+    auto prefix_bytes = get_bytes(4, timeout);
 
     auto prefix = uint32_t{};
     std::copy(
-      input_buffer_.begin(), std::next(input_buffer_.begin(), 4),
-      reinterpret_cast<char *>(&prefix));
+      prefix_bytes.begin(), std::next(prefix_bytes.begin(), 4), reinterpret_cast<char *>(&prefix));
     prefix = ntohl(prefix);
 
-    input_buffer_.erase(0, 4);
+    auto msg = get_bytes(prefix, timeout);
 
-    asio::async_read(
-      socket_, asio::dynamic_buffer(input_buffer_), asio::transfer_exactly(prefix),
-      [&](const std::error_code & result_error, std::size_t result_length) {
-        error = result_error;
-        length = result_length;
-      });
-
-    run(timeout);
-
-    if (length != prefix) {
-      throw std::runtime_error("Failed to read prefix");
-    }
-
-    if (error) throw std::system_error(error);
-
-    std::string msg(input_buffer_.substr(0, prefix));
-    input_buffer_.erase(0, prefix);
     return msg;
   }
 
@@ -122,6 +89,30 @@ public:
   }
 
 protected:
+  std::string get_bytes(const size_t & n_bytes, const std::chrono::steady_clock::duration & timeout)
+  {
+    std::string data{};
+    std::error_code error{};
+    size_t length = 0;
+
+    asio::async_read(
+      socket_, asio::dynamic_buffer(data), asio::transfer_exactly(n_bytes),
+      [&](const std::error_code & result_error, std::size_t result_length) {
+        error = result_error;
+        length = result_length;
+      });
+
+    run(timeout);
+
+    if (length != n_bytes) {
+      throw std::runtime_error("Failed to get " + std::to_string(n_bytes) + " bytes");
+    }
+
+    if (error) throw std::system_error(error);
+
+    return data;
+  }
+
   void run(std::chrono::steady_clock::duration timeout)
   {
     // Restart the io_context, as it may have been left in the "stopped" state
@@ -145,7 +136,6 @@ protected:
 
   asio::io_context io_context_;
   tcp::socket socket_{io_context_};
-  std::string input_buffer_;
 };
 
 class Client : public Socket
