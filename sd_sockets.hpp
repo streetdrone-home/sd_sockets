@@ -65,8 +65,8 @@ public:
     auto len = htonl(msg.length());
     auto prefix = std::string{reinterpret_cast<const char *>(&len), 4};
     auto data = prefix + msg;
+    auto error = std::error_code{};
 
-    std::error_code error;
     asio::async_write(
       socket_, asio::buffer(data), asio::transfer_exactly(data.length()),
       [&](const std::error_code & result_error, size_t /*result_length*/) {
@@ -92,9 +92,9 @@ public:
 protected:
   std::string get_bytes(size_t n_bytes, const std::chrono::steady_clock::duration & timeout)
   {
-    std::string data;
-    std::error_code error;
-    size_t length = 0;
+    auto data = std::string{};
+    auto error = std::error_code{};
+    auto length = size_t{};
 
     asio::async_read(
       socket_, asio::dynamic_buffer(data), asio::transfer_exactly(n_bytes),
@@ -146,8 +146,8 @@ public:
     const std::string & host, int port, const std::chrono::steady_clock::duration & timeout)
   {
     auto endpoints = tcp::resolver(io_context_).resolve(host, std::to_string(port));
+    auto error = std::error_code{};
 
-    std::error_code error;
     asio::async_connect(
       socket_, endpoints,
       [&](const std::error_code & result_error, const tcp::endpoint & /*result_endpoint*/) {
