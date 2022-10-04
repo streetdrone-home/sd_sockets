@@ -45,7 +45,8 @@ namespace sd_sockets
 class Socket
 {
 public:
-  std::string read(std::chrono::steady_clock::duration timeout = std::chrono::seconds(INT_MAX))
+  std::string read(
+    const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(INT_MAX))
   {
     auto prefix_bytes = get_bytes(4, timeout);
 
@@ -68,7 +69,7 @@ public:
     std::error_code error;
     asio::async_write(
       socket_, asio::buffer(data), asio::transfer_exactly(data.length()),
-      [&](const std::error_code & result_error, std::size_t /*result_n*/) {
+      [&](const std::error_code & result_error, size_t /*result_length*/) {
         error = result_error;
       });
 
@@ -89,7 +90,7 @@ public:
   }
 
 protected:
-  std::string get_bytes(const size_t & n_bytes, const std::chrono::steady_clock::duration & timeout)
+  std::string get_bytes(size_t n_bytes, const std::chrono::steady_clock::duration & timeout)
   {
     std::string data;
     std::error_code error;
@@ -97,7 +98,7 @@ protected:
 
     asio::async_read(
       socket_, asio::dynamic_buffer(data), asio::transfer_exactly(n_bytes),
-      [&](const std::error_code & result_error, std::size_t result_length) {
+      [&](const std::error_code & result_error, size_t result_length) {
         error = result_error;
         length = result_length;
       });
@@ -113,7 +114,7 @@ protected:
     return data;
   }
 
-  void run(std::chrono::steady_clock::duration timeout)
+  void run(const std::chrono::steady_clock::duration & timeout)
   {
     // Restart the io_context, as it may have been left in the "stopped" state
     // by a previous operation.
@@ -142,7 +143,7 @@ class Client : public Socket
 {
 public:
   void connect(
-    const std::string & host, const int & port, std::chrono::steady_clock::duration timeout)
+    const std::string & host, int port, const std::chrono::steady_clock::duration & timeout)
   {
     auto endpoints = tcp::resolver(io_context_).resolve(host, std::to_string(port));
 
@@ -162,7 +163,7 @@ public:
 class Server : public Socket
 {
 public:
-  explicit Server(const int & port) : acceptor_(io_context_, tcp::endpoint(tcp::v4(), port)) {}
+  explicit Server(int port) : acceptor_(io_context_, tcp::endpoint(tcp::v4(), port)) {}
   void accept() { acceptor_.accept(socket_); }
 
 private:
