@@ -20,6 +20,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "asio/buffer.hpp"
 #include "asio/connect.hpp"
