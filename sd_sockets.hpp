@@ -48,14 +48,14 @@ public:
   std::string read(
     const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(INT_MAX))
   {
-    auto prefix_bytes = get_bytes(4, timeout);
+    auto prefix_bytes = read_exactly(4, timeout);
 
     auto prefix = uint32_t{};
     std::copy(
       prefix_bytes.begin(), std::next(prefix_bytes.begin(), 4), reinterpret_cast<char *>(&prefix));
     prefix = ntohl(prefix);
 
-    auto msg = get_bytes(prefix, timeout);
+    auto msg = read_exactly(prefix, timeout);
 
     return msg;
   }
@@ -90,7 +90,7 @@ public:
   }
 
 protected:
-  std::string get_bytes(size_t n_bytes, const std::chrono::steady_clock::duration & timeout)
+  std::string read_exactly(size_t n_bytes, const std::chrono::steady_clock::duration & timeout)
   {
     auto data = std::string{};
     auto error = std::error_code{};
