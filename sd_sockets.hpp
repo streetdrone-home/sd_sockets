@@ -16,6 +16,7 @@
 #ifndef SD_SOCKETS__SD_SOCKETS_HPP_
 #define SD_SOCKETS__SD_SOCKETS_HPP_
 
+#include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -52,10 +53,13 @@ public:
 
     auto prefix = uint32_t{};
     std::copy(
-      prefix_bytes.begin(), std::next(prefix_bytes.begin(), 4), reinterpret_cast<char *>(&prefix));
+      prefix_bytes.begin(), std::next(prefix_bytes.begin(), 4),
+      reinterpret_cast<std::byte *>(&prefix));
     prefix = ntohl(prefix);
 
-    auto msg = read_exactly(prefix, timeout);
+    auto msg_bytes = read_exactly(prefix, timeout);
+    msg_bytes.emplace_back(std::byte{0});
+    auto msg = std::string{reinterpret_cast<char *>(msg_bytes.data())};
 
     return msg;
   }
@@ -90,9 +94,10 @@ public:
   }
 
 protected:
-  std::string read_exactly(size_t n_bytes, const std::chrono::steady_clock::duration & timeout)
+  std::vector<std::byte> read_exactly(
+    size_t n_bytes, const std::chrono::steady_clock::duration & timeout)
   {
-    auto data = std::string{};
+    auto data = std::vector<std::byte>{};
     auto error = std::error_code{};
     auto length = size_t{};
 
