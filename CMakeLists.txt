@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(sd_sockets)
 
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} INTERFACE
   include/${PROJECT_NAME}/${PROJECT_NAME}.hpp
 )
 
