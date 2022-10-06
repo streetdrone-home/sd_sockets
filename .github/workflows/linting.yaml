@@ -1,0 +1,16 @@
+name: code style
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: DoozyX/clang-format-lint-action@v0.12
+      with:
+        source: '.'
+        extensions: 'c,h,C,H,cpp,hpp,cc'
+        clangFormatVersion: 9
+        style: file
