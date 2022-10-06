@@ -19,20 +19,21 @@ It provides methods for reading and writing to the socket, and a few methods hel
 
 ### *Public Methods*
 
-#### __`read(const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(INT_MAX))`__
+#### __`read(const steady_clock::duration & timeout = steady_clock::duration::max())`__
 
 Following the communication protocol, this method reads a message from the socket by first reading 4 bytes, converting this value into an unsigned integer and from network to host byte order, then reads that number more bytes from the socket.
 The result is a byte array containing the message, which is then cast to a `std::string` and returned.
 
 The method will fail if the timeout duration passes without a successful read.
-If no timeout is provided, the method will block for `INT_MAX` seconds, an effectively indefinite waiting period since no socket will be left running for 68 years.
+If no timeout is provided, the method will block indefinitely.
 
-#### __`write(const std::string & msg, std::chrono::steady_clock::duration timeout)`__
+#### __`write(const std::string & msg, const steady_clock::duration & timeout = steady_clock::duration::max())`__
 
 The inversion of `read()`, this method accepts a message string and gets the length.
 The length is converted from host to network byte order before being prepended to the message and written to the socket.
 
 As with the read method, this will fail if no socket completes reading the message before the timeout duration passes.
+If no timeout is provided, the method will block indefinitely.
 
 #### __`is_open()`__
 
@@ -45,13 +46,13 @@ Cleanly closes the socket by first closing the socket object and then running th
 
 ### *Protected Methods*
 
-#### __`read_exactly(size_t n_bytes, const std::chrono::steady_clock::duration & timeout)`__
+#### __`read_exactly(size_t n_bytes, const steady_clock::duration & timeout)`__
 
 This method assists with the precise reading that is executed in the `read()` method.
 It takes the number of bytes and a timeout as parameters, then returns a `std::vector<std::byte>` containing the bytes read.
 The timeout is required for the contained `run()` method (see below for description).
 
-#### __`run(const std::chrono::steady_clock::duration & timeout)`__
+#### __`run(const steady_clock::duration & timeout)`__
 
 This is the method that runs waiting asynchronous operations.
 
@@ -66,7 +67,7 @@ It outputs to `stderr` stating that the timeout was reached and then closes the 
 
 The `Client` inherits from the `Socket` class and contains only one public method.
 
-#### __`connect(const std::string & host, int port, const std::chrono::steady_clock::duration & timeout)`__
+#### __`connect(const std::string & host, int port, const steady_clock::duration & timeout)`__
 
 This method perfroms an asynchronous connection call to the specified host and port.
 The server must be running at the specified address before the connection is attempted.
