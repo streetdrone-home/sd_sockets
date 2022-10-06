@@ -34,7 +34,6 @@ using asio::ip::tcp;
 
 namespace sd_sockets
 {
-
 // This class manages socket timeouts by running the io_context using the timed
 // io_context::run_for() member function. Each asynchronous operation is given
 // a timeout within which it must complete. The socket operations themselves
