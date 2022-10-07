@@ -100,12 +100,34 @@ Clone this repository:
 git clone https://github.com/streetdrone-home/sd_sockets.git
 ```
 
-## Build
+## Install
+
+Run these commands to install the interface library locally.
+Change `CMAKE_INSTALL_PREFIX` as needed.
 
 ```bash
 cd sd_sockets
-mkdir build
-cd build
-cmake ..
-make
+mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/
+cmake --build . --config Release --target install -- -j $(nproc)
+```
+
+## Usage
+
+To include `sd_sockets` in your C++ code, simply use:
+
+```cpp
+#include "sd_sockets/sd_sockets.hpp"
+```
+
+Then in the CMakeLists.txt of your project add the following:
+
+```cmake
+find_package(sd_sockets CONFIG REQUIRED)
+```
+
+Finally, following any `add_executable()` call to a target that includes the library, add:
+
+```cmake
+target_link_libraries(<target_name> sd_sockets)
 ```
