@@ -89,7 +89,7 @@ Accepts an incomming connection from a client.
 ## Requirements
 
 - [Asio](https://think-async.com/Asio/) (non-Boost) >= 1.18
-- CMake >= 3.10
+- CMake >= 3.12
 - C++ 17
 
 ## Download
