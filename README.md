@@ -131,3 +131,7 @@ Finally, following any `add_executable()` call to a target that includes the lib
 ```cmake
 target_link_libraries(<target_name> sd_sockets)
 ```
+
+## Version Policy
+
+This package follows [semantic versioning](https://semver.org/).
