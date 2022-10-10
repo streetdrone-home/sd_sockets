@@ -1,0 +1,6 @@
+The Initial Developer of include/sd_sockets/sd_sockets.hpp, which was derived
+from Asio examples, is Christopher M. Kohlhoff (chris at kohlhoff dot com), and
+was originally released under the Boost License (https://www.boost.org/LICENSE_1_0.txt).
+Copyright (c) 2003-2020 Christopher M. Kohlhoff. All Rights Reserved.
+See Asio examples at:
+https://think-async.com/Asio/asio-1.18.1/doc/asio/examples/cpp11_examples.html#asio.examples.cpp11_examples.timeouts
