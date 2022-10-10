@@ -129,7 +129,7 @@ find_package(sd_sockets CONFIG REQUIRED)
 Finally, following any `add_executable()` call to a target that includes the library, add:
 
 ```cmake
-target_link_libraries(<target_name> sd_sockets)
+target_link_libraries(<target_name> sd_sockets::sd_sockets)
 ```
 
 ## Version Policy
