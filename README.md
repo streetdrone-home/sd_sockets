@@ -108,7 +108,7 @@ Change `CMAKE_INSTALL_PREFIX` as needed.
 ```bash
 cd sd_sockets
 mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/
+cmake ..
 cmake --build . --config Release --target install -- -j $(nproc)
 ```
 
