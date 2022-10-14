@@ -149,7 +149,8 @@ class Client : public Socket
 {
 public:
   void connect(
-    const std::string & host, int port, const std::chrono::steady_clock::duration & timeout)
+    const std::string & host, int port,
+    const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))
   {
     auto endpoints = tcp::resolver(io_context_).resolve(host, std::to_string(port));
     auto error = std::error_code{};
