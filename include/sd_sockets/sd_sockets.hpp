@@ -46,9 +46,7 @@ namespace sd_sockets
 class Socket
 {
 public:
-  std::string read(
-    const std::chrono::steady_clock::duration & timeout =
-      std::chrono::steady_clock::duration::max())
+  std::string read(const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))
   {
     auto prefix_bytes = read_exactly(4, timeout);
 
@@ -66,8 +64,8 @@ public:
   }
 
   void write(
-    const std::string & msg, const std::chrono::steady_clock::duration & timeout =
-                               std::chrono::steady_clock::duration::max())
+    const std::string & msg,
+    const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))
   {
     auto len = htonl(msg.length());
     auto prefix = std::string{reinterpret_cast<const char *>(&len), 4};
