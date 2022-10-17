@@ -37,7 +37,7 @@ If no timeout is provided, the method will block for 5 minutes.
 
 #### __`is_open()`__
 
-A simple method that returns `true` if the socket is currently open and `false` otherwise. 
+A simple method that returns `true` if the socket is currently open and `false` otherwise.
 This is a useful value to check before attempting to `read()` or `write()` using the socket, because doing so while the socket is closed will result in an error.
 
 #### __`close()`__
@@ -92,6 +92,31 @@ Accepts an incomming connection from a client.
 - [Asio](https://think-async.com/Asio/) (non-Boost) >= 1.18
 - CMake >= 3.12
 - C++ 17
+
+### __Installing Asio using a Package Manager__
+
+Asio is a header-only library by default, so you could just dowload the files and put them in your include directory.
+
+Alternatively, follow these commands to install Asio through your package manager (probably easiest).
+
+### Ubuntu
+
+```console
+sudo apt install libasio-dev
+```
+
+### Fedora
+
+```console
+sudo dnf install asio-devel
+```
+
+### Arch
+```
+sudo pacman -S asio
+```
+
+To install Asio
 
 ## Download
 
