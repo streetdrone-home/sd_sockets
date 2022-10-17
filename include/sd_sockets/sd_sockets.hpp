@@ -44,7 +44,7 @@ namespace sd_sockets
 class Socket
 {
 public:
-  std::string read(const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))
+  std::string read(const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))
   {
     auto prefix_bytes = read_exactly(4, timeout);
 
@@ -63,7 +63,7 @@ public:
 
   void write(
     const std::string & msg,
-    const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))
+    const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))
   {
     auto len = htonl(msg.length());
     auto prefix = std::string{reinterpret_cast<const char *>(&len), 4};
@@ -148,7 +148,7 @@ class Client : public Socket
 public:
   void connect(
     const std::string & host, int port,
-    const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))
+    const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))
   {
     auto endpoints = asio::ip::tcp::resolver(io_context_).resolve(host, std::to_string(port));
     auto error = std::error_code{};
