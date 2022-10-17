@@ -25,7 +25,7 @@ Following the communication protocol, this method reads a message from the socke
 The result is a byte array containing the message, which is then cast to a `std::string` and returned.
 
 The method will fail if the timeout duration passes without a successful read.
-If no timeout is provided, the method will block for 5 minutes.
+If no timeout is provided, the method will block for 1 second.
 
 #### __`write(const std::string & msg, const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))`__
 
@@ -33,7 +33,7 @@ The inversion of `read()`, this method accepts a message string and gets the len
 The length is converted from host to network byte order before being prepended to the message and written to the socket.
 
 As with the read method, this will fail if no socket completes reading the message before the timeout duration passes.
-If no timeout is provided, the method will block for 5 minutes.
+If no timeout is provided, the method will block for 1 second.
 
 #### __`is_open()`__
 
@@ -72,7 +72,7 @@ The `Client` inherits from the `Socket` class and contains only one public metho
 This method perfroms an asynchronous connection call to the specified host and port.
 The server must be running at the specified address before the connection is attempted.
 If the timeout passes before the connection has been completed, the method fails.
-If no timeout is provided, the method will block for 5 minutes.
+If no timeout is provided, the method will block for 1 second.
 
 ### __`Server`__
 
