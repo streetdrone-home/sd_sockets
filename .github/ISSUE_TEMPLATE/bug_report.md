@@ -11,12 +11,15 @@ assignees: ''
 A clear and concise description of what/where the bug is.
 
 **Steps to reproduce**
-1. Set '...'
-2. Run '...'
-3. See error
+1. ...
+2. ...
+3. ...
 
 **Expected behavior**
 A clear description of what you expected to happen.
+
+**Actual behavior**
+Describe what actually happened.
 
 **Screenshots/Printouts**
 If applicable, add screenshots to help explain your problem. Delete if irrelevant.
