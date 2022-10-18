@@ -129,7 +129,6 @@ git clone https://github.com/streetdrone-home/sd_sockets.git
 ## Install
 
 Run these commands to install the interface library locally.
-Change `CMAKE_INSTALL_PREFIX` as needed.
 
 ```bash
 cd sd_sockets
@@ -137,6 +136,8 @@ mkdir build && cd build
 cmake ..
 cmake --build . --config Release --target install -- -j $(nproc)
 ```
+
+Depending on your system's default install location, you may need to run the build command with `sudo`.
 
 ## Usage
 
