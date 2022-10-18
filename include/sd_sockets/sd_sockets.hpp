@@ -30,9 +30,6 @@
 #include "asio/system_error.hpp"
 #include "asio/write.hpp"
 
-using asio::ip::tcp;
-using std::chrono::steady_clock;
-
 namespace sd_sockets
 {
 // This class manages socket timeouts by running the io_context using the timed
@@ -47,7 +44,7 @@ namespace sd_sockets
 class Socket
 {
 public:
-  std::string read(const steady_clock::duration & timeout = steady_clock::duration::max())
+  std::string read(const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))
   {
     auto prefix_bytes = read_exactly(4, timeout);
 
@@ -65,7 +62,8 @@ public:
   }
 
   void write(
-    const std::string & msg, const steady_clock::duration & timeout = steady_clock::duration::max())
+    const std::string & msg,
+    const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))
   {
     auto len = htonl(msg.length());
     auto prefix = std::string{reinterpret_cast<const char *>(&len), 4};
@@ -95,7 +93,8 @@ public:
   }
 
 protected:
-  std::vector<std::byte> read_exactly(size_t n_bytes, const steady_clock::duration & timeout)
+  std::vector<std::byte> read_exactly(
+    size_t n_bytes, const std::chrono::steady_clock::duration & timeout)
   {
     auto data = std::vector<std::byte>{};
     auto error = std::error_code{};
@@ -119,7 +118,7 @@ protected:
     return data;
   }
 
-  void run(const steady_clock::duration & timeout)
+  void run(const std::chrono::steady_clock::duration & timeout)
   {
     // Restart the io_context, as it may have been left in the "stopped" state
     // by a previous operation.
@@ -141,20 +140,23 @@ protected:
   }
 
   asio::io_context io_context_;
-  tcp::socket socket_{io_context_};
+  asio::ip::tcp::socket socket_{io_context_};
 };
 
 class Client : public Socket
 {
 public:
-  void connect(const std::string & host, int port, const steady_clock::duration & timeout)
+  void connect(
+    const std::string & host, int port,
+    const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))
   {
-    auto endpoints = tcp::resolver(io_context_).resolve(host, std::to_string(port));
+    auto endpoints = asio::ip::tcp::resolver(io_context_).resolve(host, std::to_string(port));
     auto error = std::error_code{};
 
     asio::async_connect(
       socket_, endpoints,
-      [&](const std::error_code & result_error, const tcp::endpoint & /*result_endpoint*/) {
+      [&](
+        const std::error_code & result_error, const asio::ip::tcp::endpoint & /*result_endpoint*/) {
         error = result_error;
       });
 
@@ -167,11 +169,14 @@ public:
 class Server : public Socket
 {
 public:
-  explicit Server(int port) : acceptor_(io_context_, tcp::endpoint(tcp::v4(), port)) {}
+  explicit Server(int port)
+  : acceptor_(io_context_, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+  {
+  }
   void accept() { acceptor_.accept(socket_); }
 
 private:
-  tcp::acceptor acceptor_;
+  asio::ip::tcp::acceptor acceptor_;
 };
 }  // namespace sd_sockets
 
