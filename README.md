@@ -112,11 +112,10 @@ sudo dnf install asio-devel
 ```
 
 ### Arch
-```
+
+```console
 sudo pacman -S asio
 ```
-
-To install Asio
 
 ## Download
 
