@@ -19,7 +19,7 @@ It provides methods for reading and writing to the socket, and a few methods hel
 
 ### *Public Methods*
 
-#### __`read(const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))`__
+#### __`read(const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))`__
 
 Following the communication protocol, this method reads a message from the socket by first reading 4 bytes, converting this value into an unsigned integer and from network to host byte order, then reads that number more bytes from the socket.
 The result is a byte array containing the message, which is then cast to a `std::string` and returned.
@@ -27,7 +27,7 @@ The result is a byte array containing the message, which is then cast to a `std:
 The method will fail if the timeout duration passes without a successful read.
 If no timeout is provided, the method will block for 1 second.
 
-#### __`write(const std::string & msg, const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))`__
+#### __`write(const std::string & msg, const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))`__
 
 The inversion of `read()`, this method accepts a message string and gets the length.
 The length is converted from host to network byte order before being prepended to the message and written to the socket.
@@ -67,7 +67,7 @@ It outputs to `stderr` stating that the timeout was reached and then closes the 
 
 The `Client` inherits from the `Socket` class and contains only one public method.
 
-#### __`connect(const std::string & host, int port, const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))`__
+#### __`connect(const std::string & host, int port, const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))`__
 
 This method perfroms an asynchronous connection call to the specified host and port.
 The server must be running at the specified address before the connection is attempted.
