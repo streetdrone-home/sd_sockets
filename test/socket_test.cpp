@@ -22,7 +22,7 @@ TEST(is_open_test, check_closed_on_init)
   auto client = sd_sockets::Client{};
   auto server = sd_sockets::Server{15243};
 
-  EXPECT_EQ(false, socket.is_open());
-  EXPECT_EQ(false, client.is_open());
-  EXPECT_EQ(false, server.is_open());
+  EXPECT_FALSE(socket.is_open());
+  EXPECT_FALSE(client.is_open());
+  EXPECT_FALSE(server.is_open());
 }
