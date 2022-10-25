@@ -57,6 +57,9 @@ TEST(read_write_test, server_to_client)
   auto output = client.read();
   t2.join();
 
+  ASSERT_TRUE(client.is_open());
+  ASSERT_TRUE(server.is_open());
+
   EXPECT_EQ(input, output) << "Expected " << input << ", got " << output;
 }
 
@@ -73,6 +76,9 @@ TEST(read_write_test, client_to_server)
   std::thread t2([&]() { client.write(input); });
   auto output = server.read();
   t2.join();
+
+  ASSERT_TRUE(client.is_open());
+  ASSERT_TRUE(server.is_open());
 
   EXPECT_EQ(input, output) << "Expected " << input << ", got " << output;
 }
