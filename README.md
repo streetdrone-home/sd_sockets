@@ -159,6 +159,21 @@ Finally, following any `add_executable()` call to a target that includes the lib
 target_link_libraries(<target_name> sd_sockets::sd_sockets)
 ```
 
+## Testing
+
+To run tests, run the install step with 
+
+```console
+cmake -DSD_SOCKETS_TESTING=ON ..
+```
+then run the build command as usual. Then, in the build directory, run:
+
+```console
+ctest
+```
+
+You should see the test results in the terminal.
+
 ## Version Policy
 
 This package follows [semantic versioning](https://semver.org/).
