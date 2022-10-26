@@ -17,7 +17,7 @@
 #include "gtest/gtest.h"
 #include "sd_sockets/sd_sockets.hpp"
 
-TEST(is_open_test, check_closed_on_init)
+TEST(is_open_test, check_before_and_after_connect)
 {
   auto socket = sd_sockets::Socket{};
   auto client = sd_sockets::Client{};
@@ -26,13 +26,6 @@ TEST(is_open_test, check_closed_on_init)
   EXPECT_FALSE(socket.is_open());
   EXPECT_FALSE(client.is_open());
   EXPECT_FALSE(server.is_open());
-}
-
-TEST(is_open_test, check_open_after_connect)
-{
-  auto socket = sd_sockets::Socket{};
-  auto client = sd_sockets::Client{};
-  auto server = sd_sockets::Server{15243};
 
   std::thread t1([&]() { server.accept(); });
   client.connect("127.0.0.1", 15243);
