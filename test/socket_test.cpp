@@ -17,60 +17,58 @@
 #include "gtest/gtest.h"
 #include "sd_sockets/sd_sockets.hpp"
 
-TEST(is_open_test, check_before_and_after_connect)
+class SocketPairTest : public ::testing::Test
 {
-  auto socket = sd_sockets::Socket{};
-  auto client = sd_sockets::Client{};
-  auto server = sd_sockets::Server{15243};
+protected:
+  sd_sockets::Client client_{};
+  sd_sockets::Server server_{15243};
 
-  EXPECT_FALSE(socket.is_open());
-  EXPECT_FALSE(client.is_open());
-  EXPECT_FALSE(server.is_open());
+  void connect_sockets()
+  {
+    std::thread t1([&]() { server_.accept(); });
+    client_.connect("127.0.0.1", 15243);
+    t1.join();
+  }
+};
 
-  std::thread t1([&]() { server.accept(); });
-  client.connect("127.0.0.1", 15243);
-  t1.join();
+TEST_F(SocketPairTest, check_is_open)
+{
+  EXPECT_FALSE(client_.is_open());
+  EXPECT_FALSE(server_.is_open());
 
-  EXPECT_FALSE(socket.is_open());
-  EXPECT_TRUE(client.is_open());
-  EXPECT_TRUE(server.is_open());
+  connect_sockets();
+
+  EXPECT_TRUE(client_.is_open());
+  EXPECT_TRUE(server_.is_open());
 }
 
-TEST(read_write_test, server_to_client)
+TEST_F(SocketPairTest, server_to_client)
 {
   auto input = "Hello, World!";
-  auto client = sd_sockets::Client{};
-  auto server = sd_sockets::Server{15243};
 
-  std::thread t1([&]() { server.accept(); });
-  client.connect("127.0.0.1", 15243);
-  t1.join();
+  connect_sockets();
 
-  ASSERT_TRUE(client.is_open());
-  ASSERT_TRUE(server.is_open());
+  ASSERT_TRUE(client_.is_open());
+  ASSERT_TRUE(server_.is_open());
 
-  std::thread t2([&]() { server.write(input); });
-  auto output = client.read();
+  std::thread t2([&]() { server_.write(input); });
+  auto output = client_.read();
   t2.join();
 
   EXPECT_EQ(input, output);
 }
 
-TEST(read_write_test, client_to_server)
+TEST_F(SocketPairTest, client_to_server)
 {
   auto input = "Hello, World!";
-  auto client = sd_sockets::Client{};
-  auto server = sd_sockets::Server{15243};
 
-  std::thread t1([&]() { server.accept(); });
-  client.connect("127.0.0.1", 15243);
-  t1.join();
+  connect_sockets();
 
-  ASSERT_TRUE(client.is_open());
-  ASSERT_TRUE(server.is_open());
+  ASSERT_TRUE(client_.is_open());
+  ASSERT_TRUE(server_.is_open());
 
-  std::thread t2([&]() { client.write(input); });
-  auto output = server.read();
+  std::thread t2([&]() { client_.write(input); });
+  auto output = server_.read();
   t2.join();
 
   EXPECT_EQ(input, output);
