@@ -53,7 +53,7 @@ TEST(read_write_test, server_to_client)
   auto output = client.read();
   t2.join();
 
-  EXPECT_EQ(input, output) << "Expected " << input << ", got " << output;
+  EXPECT_EQ(input, output);
 }
 
 TEST(read_write_test, client_to_server)
@@ -73,5 +73,5 @@ TEST(read_write_test, client_to_server)
   auto output = server.read();
   t2.join();
 
-  EXPECT_EQ(input, output) << "Expected " << input << ", got " << output;
+  EXPECT_EQ(input, output);
 }
