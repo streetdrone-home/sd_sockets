@@ -121,8 +121,6 @@ sudo dnf install asio-devel gtest
 sudo pacman -S asio gtest
 ```
 
-To install Asio
-
 ## Download
 
 Clone this repository:
