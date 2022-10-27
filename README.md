@@ -133,7 +133,7 @@ Run these commands to install the interface library locally.
 ```bash
 cd sd_sockets
 mkdir build && cd build
-cmake ..
+cmake -DBUILD_TESTING=OFF ..
 cmake --build . --config Release --target install -- -j $(nproc)
 ```
 
@@ -164,7 +164,7 @@ target_link_libraries(<target_name> sd_sockets::sd_sockets)
 To run tests, run the install step with 
 
 ```console
-cmake -DSD_SOCKETS_TESTING=ON ..
+cmake -DBUILD_TESTING=ON ..
 ```
 then run the build command as usual. Then, in the build directory, run:
 

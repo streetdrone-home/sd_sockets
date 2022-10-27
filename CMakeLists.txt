@@ -9,8 +9,6 @@ project("sd_sockets"
 include(GNUInstallDirs)
 include(CTest)
 
-option(SD_SOCKETS_TESTING "Compile Tests for SD_Sockets" OFF)
-
 add_library(sd_sockets INTERFACE)
 
 target_include_directories(
@@ -52,7 +50,7 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/sd_sockets DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-if(BUILD_TESTING AND SD_SOCKETS_TESTING)
+if(BUILD_TESTING)
   include(FetchContent)
   FetchContent_Declare(
     googletest
