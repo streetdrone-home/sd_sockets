@@ -92,28 +92,33 @@ Accepts an incomming connection from a client.
 - [Asio](https://think-async.com/Asio/) (non-Boost) >= 1.18
 - CMake >= 3.12
 - C++ 17
+- GTest
 
-### __Installing Asio using a Package Manager__
+### __Installing Dependencies__
+
+The CMake and C++ versions required should be included with your Linux distribution.
 
 Asio is a header-only library by default, so you could just dowload the files and put them in your include directory.
 
-Alternatively, follow these commands to install Asio through your package manager (probably easiest).
+GTest has several options for installing or including, detailed in the README [here](https://github.com/google/googletest/blob/main/googletest/README.md).
+
+Alternatively, follow these commands to install Asio and GTest through your package manager (probably easiest).
 
 ### Ubuntu
 
 ```console
-sudo apt install libasio-dev
+sudo apt install libasio-dev libgtest-dev
 ```
 
 ### Fedora
 
 ```console
-sudo dnf install asio-devel
+sudo dnf install asio-devel gtest
 ```
 
 ### Arch
 ```
-sudo pacman -S asio
+sudo pacman -S asio gtest
 ```
 
 To install Asio
