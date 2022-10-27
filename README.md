@@ -117,7 +117,7 @@ sudo dnf install asio-devel gtest
 ```
 
 ### Arch
-```
+```console
 sudo pacman -S asio gtest
 ```
 
