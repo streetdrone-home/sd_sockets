@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.12)
 
 project("sd_sockets"
-  VERSION 1.0.1
+  VERSION 1.1.0
   DESCRIPTION "A header-only C++ library that provides easy-to-use TCP clients and servers."
   HOMEPAGE_URL "https://github.com/streetdrone-home/sd_sockets"
 )
 
 include(GNUInstallDirs)
+include(CTest)
 
 add_library(sd_sockets INTERFACE)
 
@@ -48,3 +49,8 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/sd_sockets DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+if(BUILD_TESTING)
+  find_package(GTest CONFIG REQUIRED)
+  add_subdirectory(test)
+endif()

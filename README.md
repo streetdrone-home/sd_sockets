@@ -19,7 +19,7 @@ It provides methods for reading and writing to the socket, and a few methods hel
 
 ### *Public Methods*
 
-#### __`read(const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))`__
+#### __`read(const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))`__
 
 Following the communication protocol, this method reads a message from the socket by first reading 4 bytes, converting this value into an unsigned integer and from network to host byte order, then reads that number more bytes from the socket.
 The result is a byte array containing the message, which is then cast to a `std::string` and returned.
@@ -27,7 +27,7 @@ The result is a byte array containing the message, which is then cast to a `std:
 The method will fail if the timeout duration passes without a successful read.
 If no timeout is provided, the method will block for 1 second.
 
-#### __`write(const std::string & msg, const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))`__
+#### __`write(const std::string & msg, const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))`__
 
 The inversion of `read()`, this method accepts a message string and gets the length.
 The length is converted from host to network byte order before being prepended to the message and written to the socket.
@@ -67,7 +67,7 @@ It outputs to `stderr` stating that the timeout was reached and then closes the 
 
 The `Client` inherits from the `Socket` class and contains only one public method.
 
-#### __`connect(const std::string & host, int port, const std::chrono::steady_clock::duration & timeout = std::chrono::minutes(5))`__
+#### __`connect(const std::string & host, int port, const std::chrono::steady_clock::duration & timeout = std::chrono::seconds(1))`__
 
 This method perfroms an asynchronous connection call to the specified host and port.
 The server must be running at the specified address before the connection is attempted.
@@ -92,29 +92,33 @@ Accepts an incomming connection from a client.
 - [Asio](https://think-async.com/Asio/) (non-Boost) >= 1.18
 - CMake >= 3.12
 - C++ 17
+- GTest
 
-### __Installing Asio using a Package Manager__
+### __Installing Dependencies__
+
+The CMake and C++ versions required should be included with your Linux distribution.
 
 Asio is a header-only library by default, so you could just dowload the files and put them in your include directory.
 
-Alternatively, follow these commands to install Asio through your package manager (probably easiest).
+GTest has several options for installing or including, detailed in the README [here](https://github.com/google/googletest/blob/main/googletest/README.md).
+
+Alternatively, follow these commands to install Asio and GTest through your package manager (probably easiest).
 
 ### Ubuntu
 
 ```console
-sudo apt install libasio-dev
+sudo apt install libasio-dev libgtest-dev
 ```
 
 ### Fedora
 
 ```console
-sudo dnf install asio-devel
+sudo dnf install asio-devel gtest
 ```
 
 ### Arch
-
 ```console
-sudo pacman -S asio
+sudo pacman -S asio gtest
 ```
 
 ## Download
@@ -132,7 +136,7 @@ Run these commands to install the interface library locally.
 ```bash
 cd sd_sockets
 mkdir build && cd build
-cmake ..
+cmake -DBUILD_TESTING=OFF ..
 cmake --build . --config Release --target install -- -j $(nproc)
 ```
 
@@ -157,6 +161,21 @@ Finally, following any `add_executable()` call to a target that includes the lib
 ```cmake
 target_link_libraries(<target_name> sd_sockets::sd_sockets)
 ```
+
+## Testing
+
+To run tests, run the install step with 
+
+```console
+cmake -DBUILD_TESTING=ON ..
+```
+then run the build command as usual. Then, in the build directory, run:
+
+```console
+ctest
+```
+
+You should see the test results in the terminal.
 
 ## Version Policy
 
