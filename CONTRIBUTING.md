@@ -56,3 +56,13 @@ Each pull request should increment the version number appropriately according to
 the changes being made.
 If your PR is merged, the merge commit on the main branch will then be tagged
 with the new version number.
+
+The version number for the project is found at the top of the [CMakeLists.txt](./CMakeLists.txt):
+
+```cmake
+project("sd_sockets"
+  VERSION 1.1.1
+  DESCRIPTION "A header-only C++ library that provides easy-to-use TCP clients and servers."
+  HOMEPAGE_URL "https://github.com/streetdrone-home/sd_sockets"
+)
+```
