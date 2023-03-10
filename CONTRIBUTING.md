@@ -16,6 +16,11 @@ be under the Apache 2 License, as dictated by that
    with Licensor regarding such Contributions.
 ~~~
 
+## Use Non-Boost Asio
+
+To minimize dependencies, this library only uses the non-Boost version of Asio.
+Changes made that require Boost as a dependency will not be accepted.
+
 ## Style Guide
 
 We follow the ROS2 format configuration provided in the `.clang-format` file in
