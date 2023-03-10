@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 project("sd_sockets"
-  VERSION 1.1.0
+  VERSION 1.1.1
   DESCRIPTION "A header-only C++ library that provides easy-to-use TCP clients and servers."
   HOMEPAGE_URL "https://github.com/streetdrone-home/sd_sockets"
 )
