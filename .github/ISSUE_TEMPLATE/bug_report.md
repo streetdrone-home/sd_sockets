@@ -29,8 +29,8 @@ If applicable, add screenshots to help explain your problem. Delete if irrelevan
  - Asio version: [ e.g. 1.18 ]
  - CMake version: [ e.g. 3.12 ]
 
- Alternatively, if using [sd-ade](https://github.com/streetdrone-home/sd-ade) or [sd-ros2-ade](https://github.com/streetdrone-home/sd_ros2_ade):
- - ADE version: [ e.g. sd_ros2_ade ]
+ Alternatively, if using a development environment, please specify which one you are using along with a link:
+ - Development environment: [ e.g. [ROS2 ADE](https://gitlab.apex.ai/apex.ai-public/ros2-ade) ]
 
 **Additional context**
 Add any other context about the problem here.

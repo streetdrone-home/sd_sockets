@@ -164,7 +164,7 @@ target_link_libraries(<target_name> sd_sockets::sd_sockets)
 
 ## Testing
 
-To run tests, run the install step with 
+To run tests, run the install step with
 
 ```console
 cmake -DBUILD_TESTING=ON ..
@@ -176,6 +176,10 @@ ctest
 ```
 
 You should see the test results in the terminal.
+
+## Contributing
+
+Please see futher instructions in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Version Policy
 
