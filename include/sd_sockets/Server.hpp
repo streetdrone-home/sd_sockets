@@ -87,7 +87,7 @@ namespace sd_sockets {
     void close() {
       // Close the socket to cancel the outstanding asynchronous operation.
       for (auto item : sockets) {
-        sockets[item.first]->close();
+        destroySocket(item.first);
       }
 
       // Run the io_context again until the operation completes.
