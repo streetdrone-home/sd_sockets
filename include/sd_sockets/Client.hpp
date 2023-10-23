@@ -17,7 +17,6 @@
 
 namespace sd_sockets
 {
-
 class Client
 {
 public:
