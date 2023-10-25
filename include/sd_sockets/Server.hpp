@@ -23,25 +23,6 @@
 
 namespace sd_sockets
 {
-template <typename... Args>
-std::string format(std::string str, Args... args)
-{
-  const char * std_ = str.c_str();
-  char msg_[1024];
-  sprintf(msg_, std_, args...);
-  std::string msg = std::string(msg_);
-  return msg;
-}
-
-std::string generateUuid()
-{
-  std::string strUuid = format(
-    "%x-%x-%x-%x-%x5678f", rand(), ((rand() & 0x0fff) | 0x4000), ((rand() & 0x0fff) | 0x4000),
-    rand() % 0x3fff + 0x8000, rand(), rand());
-
-  return strUuid;
-}
-
 class Server
 {
 public:
@@ -66,7 +47,7 @@ public:
     msg_bytes.emplace_back(std::byte{0});
     auto msg = std::string(reinterpret_cast<char *>(msg_bytes.data()));
 
-    return msg;
+    return std::move(msg);
   }
 
   void write(
@@ -135,6 +116,25 @@ public:
   }
 
 private:
+  template <typename... Args>
+  std::string format(std::string str, Args... args)
+  {
+    const char * std_ = str.c_str();
+    char msg_[1024];
+    sprintf(msg_, std_, args...);
+    std::string msg = std::string(msg_);
+    return msg;
+  }
+
+  std::string generateUuid()
+  {
+    std::string strUuid = format(
+      "%x-%x-%x-%x-%x5678f", rand(), ((rand() & 0x0fff) | 0x4000), ((rand() & 0x0fff) | 0x4000),
+      rand() % 0x3fff + 0x8000, rand(), rand());
+
+    return strUuid;
+  }
+
   std::vector<std::byte> read_exactly(
     std::string socketId, size_t n_bytes, const std::chrono::steady_clock::duration & timeout)
   {
@@ -159,7 +159,7 @@ private:
 
     if (error) throw std::system_error(error);
 
-    return data;
+    return std::move(data);
   }
 
   void run(const std::chrono::steady_clock::duration & timeout)
