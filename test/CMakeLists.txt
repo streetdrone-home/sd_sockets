@@ -6,5 +6,7 @@ target_include_directories(
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include
 )
 
+target_compile_features(socket_test PRIVATE cxx_std_17)
+
 include(GoogleTest)
 gtest_discover_tests(socket_test)
